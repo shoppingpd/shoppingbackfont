@@ -30,7 +30,7 @@ public class 商品controller {
 	}
 
     @RequestMapping(method=RequestMethod.POST)
-    public ResponseEntity addStudent(@RequestBody 商品 st) {
+    public ResponseEntity addStudent(@RequestBody 商品dto st) {
     	boolean flag=dao.add(st);
     	if(flag) {
     		return ResponseEntity.ok(st);

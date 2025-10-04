@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,15 +60,54 @@ public class 商品dao {
 
     // ===== 新增商品 =====
     @Transactional
-    public boolean add(商品 obj) {
+    public boolean add(商品dto obj) {
         try {
-            entityManager.persist(obj);
+            商品 product = new 商品();
+
+            // ===== 將 DTO 的資料轉回實體 =====
+            product.set商品名稱(obj.get商品名稱());
+            product.set商品圖片(obj.get商品圖片());
+            product.set商品描述(obj.get商品描述());
+            product.set顏色總類(obj.get顏色總類());
+            product.set尺寸總類(obj.get尺寸總類());
+            product.set價格(obj.get價格());
+            product.set庫存數量(obj.get庫存數量());
+
+            // ===== 建立上架者 =====
+            if (obj.get上架者編號() != null) {
+                使用者 user = entityManager.find(使用者.class, Integer.valueOf(obj.get上架者編號()));
+                if (user == null) {
+                    throw new RuntimeException("上架者不存在");
+                }
+                product.set上架者(user); // 注意這裡的 setter 名稱
+            } else {
+                throw new RuntimeException("上架者編號不可為空");
+            }
+
+            // ===== 上架時間處理 =====
+            if (obj.get上架者時間() != null) {
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date date = sdf.parse(obj.get上架者時間());
+                    product.set上架時間(date);
+                } catch (Exception e) {
+                    product.set上架時間(new Date()); // fallback：格式錯誤時用現在時間
+                }
+            } else {
+                product.set上架時間(new Date());
+            }
+
+            // ✅ 存實體，不是 DTO
+            entityManager.persist(product);
+
             return true;
         } catch (Exception e) {
             System.out.println("add error: " + e.getMessage());
             return false;
         }
     }
+
+
 
     // ===== 依商品編號查找 =====
     @Transactional(readOnly = true)
