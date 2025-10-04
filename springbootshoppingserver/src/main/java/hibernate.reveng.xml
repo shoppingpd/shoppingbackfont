@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+  <table-filter match-catalog="shopping" match-name="使用者"/>
+  <table-filter match-catalog="shopping" match-name="商品"/>
+  <table-filter match-catalog="shopping" match-name="訂單"/>
+  <table-filter match-catalog="shopping" match-name="訂單明細"/>
+  <table-filter match-catalog="shopping" match-name="評論"/>
+  <table-filter match-catalog="shopping" match-name="購物車"/>
+</hibernate-reverse-engineering>
