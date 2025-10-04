@@ -46,6 +46,6 @@ public class 使用者 implements java.io.Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "使用者")
     private Set<購物車> 購物車s = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "使用者")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "上架者")
     private Set<商品> 商品s = new HashSet<>();
 }

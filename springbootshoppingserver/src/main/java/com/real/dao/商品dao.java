@@ -12,6 +12,7 @@ import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,19 +31,24 @@ public class 商品dao {
 
             // 初始化 Lazy 關聯：使用者
             for (商品 p : list) {
-                Hibernate.initialize(p.get使用者());
+                Hibernate.initialize(p.get上架者());
             }
 
             // 轉 DTO
             return list.stream()
-                    .map(p -> new 商品dto(
-                            p.get商品編號(),
-                            p.get商品名稱(),
-                            p.get商品圖片(),
-                            p.get價格(),
-                            p.get使用者() != null ? p.get使用者().get帳號() : null
-                    ))
-                    .collect(Collectors.toList());
+            	    .map(p -> new 商品dto(
+            	    		 p.get商品編號(),
+            	    	        p.get商品名稱(),
+            	    	        p.get商品圖片(),
+            	    	        p.get商品描述(),
+            	    	        p.get顏色總類(),
+            	    	        p.get尺寸總類(),
+            	    	        p.get價格(),
+            	    	        p.get庫存數量(),
+            	    	        p.get上架者() != null ? p.get上架者().get使用者編號().toString() : null,
+            	    	        p.get上架時間() != null ? p.get上架時間().toString() : null
+            	    ))
+            	    .collect(Collectors.toList());
 
         } catch (Exception e) {
             System.out.println("getAll error: " + e.getMessage());
@@ -67,17 +73,24 @@ public class 商品dao {
     public 商品dto findBySid(int sid) {
         try {
             商品 p = entityManager.find(商品.class, sid);
-            if (p != null) Hibernate.initialize(p.get使用者());
+            if (p != null) Hibernate.initialize(p.get上架者());
 
             if (p == null) return null;
 
             return new 商品dto(
-                    p.get商品編號(),
-                    p.get商品名稱(),
-                    p.get商品圖片(),
-                    p.get價格(),
-                    p.get使用者() != null ? p.get使用者().get帳號() : null
+            		p.get商品編號(),
+        	        p.get商品名稱(),
+        	        p.get商品圖片(),
+        	        p.get商品描述(),
+        	        p.get顏色總類(),
+        	        p.get尺寸總類(),
+        	        p.get價格(),
+        	        p.get庫存數量(),
+        	        p.get上架者() != null ? p.get上架者().get使用者編號().toString() : null,
+        	        p.get上架時間() != null ? p.get上架時間().toString() : null
             );
+            
+            
         } catch (Exception e) {
             System.out.println("findBySid error: " + e.getMessage());
             return null;
@@ -94,7 +107,7 @@ public class 商品dao {
             // 更新欄位
             existing.set商品名稱(obj.get商品名稱());
             existing.set價格(obj.get價格());
-            existing.set使用者(obj.get使用者());
+            existing.set上架者(obj.get上架者());
 
             entityManager.merge(existing);
             return true;

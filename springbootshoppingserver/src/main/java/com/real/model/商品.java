@@ -23,7 +23,7 @@ public class 商品 implements java.io.Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "上架者編號", nullable = false)
-    private 使用者 使用者;
+    private 使用者 上架者;
 
     @Column(name = "商品名稱", nullable = false, length = 100)
     private String 商品名稱;

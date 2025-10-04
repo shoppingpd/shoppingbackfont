@@ -39,9 +39,9 @@ public class 商品controller {
     	}
     }
     
-    @RequestMapping(value="/{sid}",method=RequestMethod.GET)	
+    @RequestMapping(value="/{商品編號}",method=RequestMethod.GET)	
 	public ResponseEntity findStudentById(@PathVariable("商品編號")int sid){
-    	商品 s1=dao.findBySid(sid);
+    	商品dto s1=dao.findBySid(sid);
 		if(s1==null)
 			return ResponseEntity.notFound().build();
 		else
@@ -62,7 +62,7 @@ public class 商品controller {
     @RequestMapping(value="/{商品編號}",method=RequestMethod.DELETE)	
    	public ResponseEntity deleteStudent(@PathVariable("商品編號")int sid){
     	
-    	商品 s1=dao.findBySid(sid);
+    	商品dto s1=dao.findBySid(sid);
     	boolean flag=dao.delete(sid);
    		
    		if(flag==false)
