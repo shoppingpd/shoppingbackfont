@@ -140,15 +140,25 @@ public class 商品dao {
 
     // ===== 更新商品 =====
     @Transactional
-    public boolean update(int sid, 商品 obj) {
+    public boolean update(int sid, 商品dto obj) {
         try {
             商品 existing = entityManager.find(商品.class, sid);
             if (existing == null) return false;
-
+            if (obj.get上架者編號() != null) {
+				使用者 user = entityManager.find(使用者.class, Integer.valueOf(obj.get上架者編號()));
+				if (user == null) {
+					throw new RuntimeException("上架者不存在");
+				}
+				existing.set上架者(user); // 注意這裡的 setter 名稱
+			}
             // 更新欄位
             existing.set商品名稱(obj.get商品名稱());
             existing.set價格(obj.get價格());
-            existing.set上架者(obj.get上架者());
+            existing.set庫存數量(obj.get庫存數量());
+            existing.set商品圖片(obj.get商品圖片());
+            existing.set商品描述(obj.get商品描述());
+            existing.set顏色總類(obj.get顏色總類());
+            existing.set尺寸總類(obj.get尺寸總類());
 
             entityManager.merge(existing);
             return true;

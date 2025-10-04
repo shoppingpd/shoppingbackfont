@@ -50,7 +50,7 @@ public class 商品controller {
 	}
     
     @RequestMapping(value="/{商品編號}",method=RequestMethod.PUT)	
-	public ResponseEntity updateStudent(@PathVariable("商品編號")int 商品編號,@RequestBody 商品 obj){
+	public ResponseEntity updateStudent(@PathVariable("商品編號")int 商品編號,@RequestBody 商品dto obj){
 		boolean s1=dao.update(商品編號, obj);
 		if(s1==false)
 			return ResponseEntity.notFound().build();

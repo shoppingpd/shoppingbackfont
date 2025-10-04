@@ -32,4 +32,13 @@ public class 購物車 implements java.io.Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "加入時間", length = 19)
     private Date 加入時間;
+
+	@Override
+	public String toString() {
+		return "購物車 [購物車編號=" + 購物車編號 + ", 使用者=" + 使用者 + ", 商品=" + 商品 + ", 數量=" + 數量 + ", 加入時間=" + 加入時間 + ", get購物車編號()="
+				+ get購物車編號() + ", get使用者()=" + get使用者() + ", get商品()=" + get商品() + ", get數量()=" + get數量()
+				+ ", get加入時間()=" + get加入時間() + ", hashCode()=" + hashCode() + ", getClass()=" + getClass()
+				+ ", toString()=" + super.toString() + "]";
+	}
+    
 }
