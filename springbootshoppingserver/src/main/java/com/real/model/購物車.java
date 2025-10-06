@@ -28,6 +28,12 @@ public class 購物車 implements java.io.Serializable {
 
     @Column(name = "數量", nullable = false)
     private int 數量;
+    
+    @Column(name = "商品大小", nullable = false)
+    private String 商品大小;
+    
+    @Column(name = "商品顏色", nullable = false)
+    private String 商品顏色;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "加入時間", length = 19)
