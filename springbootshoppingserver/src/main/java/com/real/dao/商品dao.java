@@ -57,7 +57,54 @@ public class 商品dao {
             return List.of(); // 回傳空列表比 null 更安全
         }
     }
+    
+ // 分頁方法
+    @Transactional(readOnly = true)
+    public List<商品dto> getPage(int pageNo, int pageSize, String sortBy) {
+        try {
+            int offset = pageNo * pageSize; // 計算起始位置
+            List<商品> list = entityManager.createQuery("from 商品 order by " + sortBy, 商品.class)
+                    .setFirstResult(offset)
+                    .setMaxResults(pageSize)
+                    .getResultList();
 
+            // 初始化 Lazy 關聯：使用者
+            for (商品 p : list) {
+                Hibernate.initialize(p.get上架者());
+            }
+
+            // 轉 DTO
+            return list.stream()
+                    .map(p -> new 商品dto(
+                            p.get商品編號(),
+                            p.get商品名稱(),
+                            p.get商品圖片(),
+                            p.get商品描述(),
+                            p.get顏色總類(),
+                            p.get尺寸總類(),
+                            p.get價格(),
+                            p.get庫存數量(),
+                            p.get上架者() != null ? p.get上架者().get使用者編號().toString() : null,
+                            p.get上架時間() != null ? p.get上架時間().toString() : null
+                    ))
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            System.out.println("getPage error: " + e.getMessage());
+            return List.of();
+        }
+    }
+	 // 查總數量
+	    public int getTotalCount() {
+	        Long count = entityManager.createQuery("SELECT COUNT(p) FROM 商品 p", Long.class)
+	                                  .getSingleResult();
+	        return count.intValue();
+	    }
+	// 取得最大頁數
+    public int findMaxPage() {
+        int total = getTotalCount();
+        return (int) Math.ceil((double) total / 6);
+    }
     // ===== 新增商品 =====
     @Transactional
     public boolean add(商品dto obj) {

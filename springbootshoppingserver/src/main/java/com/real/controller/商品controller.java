@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.real.model.*;
 import com.real.model.商品;
+import com.real.myinterface.商品Repository;
 import com.real.dao.商品dao;
 import com.real.dto.商品dto;
 
@@ -30,6 +32,23 @@ public class 商品controller {
 	public List<商品dto> getAll(){
 		return dao.getAll();
 	}
+	
+    // 分頁 API
+    @GetMapping("/page/{頁碼}")
+    public List<商品dto> getProducts(
+            @PathVariable("頁碼") Integer pageNo,
+            @RequestParam(defaultValue = "6") Integer size,
+            @RequestParam(defaultValue = "商品編號") String sortBy) {
+    		int pageIndex = pageNo - 1; // 前端 1 -> PageRequest 0
+        if(pageIndex < 0) pageIndex = 0; // 避免負數
+        return dao.getPage(pageNo, size, sortBy);
+    }
+    // 取得最大頁數 API
+    @GetMapping("/maxPage")
+    public int getMaxPage() {
+        return dao.findMaxPage();  // 直接用 Bean 方法就行
+    }
+
 
 	//新增商品資訊
     @RequestMapping(method=RequestMethod.POST)
