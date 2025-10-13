@@ -48,6 +48,7 @@ public class 購物車dao {
         	            p.get商品().get商品編號(),       // Integer，直接取
         	            p.get商品大小(), 
         	            p.get商品顏色(), 
+        	            p.get商品().get價格().intValue(),
         	            p.get數量(),
         	            p.get加入時間().toString()
             	    ))
@@ -127,6 +128,7 @@ public class 購物車dao {
     	            p.get商品().get商品編號(),       // Integer，直接取
     	            p.get商品大小(), 
     	            p.get商品顏色(), 
+    	            	p.get商品().get價格().intValue(),
     	            p.get數量(),
     	            p.get加入時間().toString()
             );
@@ -161,6 +163,7 @@ public class 購物車dao {
 		                    p.get商品().get商品編號(),       
 		                    p.get商品大小(), 
 		                    p.get商品顏色(), 
+		                    p.get商品().get價格().intValue(),
 		                    p.get數量(),
 		                    p.get加入時間().toString()
 		            ));
