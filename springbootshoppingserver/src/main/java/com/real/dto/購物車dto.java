@@ -19,6 +19,7 @@ public class 購物車dto {
     private Integer 商品編號;    // 如果 DB 是 int
     private String 商品大小;
     private String 商品顏色;
+    private Integer 價格;
     private Integer 數量;
     private String 加入時間;
 }
