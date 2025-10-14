@@ -66,6 +66,8 @@ public class 購物車dao {
 			購物車 cart = new 購物車();
 			cart.set數量(cartDto.get數量());
 			cart.set加入時間(new Date());
+			cart.set商品大小(cartDto.get商品大小());
+			cart.set商品顏色(cartDto.get商品顏色());
 			
 			
 			// ===== 建立使用者 =====
