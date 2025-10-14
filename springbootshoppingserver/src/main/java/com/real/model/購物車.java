@@ -1,6 +1,9 @@
 package com.real.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,6 +41,9 @@ public class 購物車 implements java.io.Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "加入時間", length = 19)
     private Date 加入時間;
+    
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "購物車")
+    private Set<訂單> 訂單 = new HashSet<>();
 
 	@Override
 	public String toString() {

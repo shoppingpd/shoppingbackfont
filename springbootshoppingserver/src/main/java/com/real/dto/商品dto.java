@@ -18,6 +18,6 @@ public class 商品dto {
     private BigDecimal 價格;
     private Integer 庫存數量;
     private String 上架者編號;
-    	private String 上架者時間;
+    private String 上架時間;
     // 只放需要的使用者資訊
 }

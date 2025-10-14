@@ -132,10 +132,10 @@ public class 商品dao {
             }
 
             // ===== 上架時間處理 =====
-            if (obj.get上架者時間() != null) {
+            if (obj.get上架時間() != null) {
                 try {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Date date = sdf.parse(obj.get上架者時間());
+                    Date date = sdf.parse(obj.get上架時間());
                     product.set上架時間(date);
                 } catch (Exception e) {
                     product.set上架時間(new Date()); // fallback：格式錯誤時用現在時間

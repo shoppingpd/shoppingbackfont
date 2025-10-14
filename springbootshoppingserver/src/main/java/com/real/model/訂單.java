@@ -25,6 +25,13 @@ public class 訂單 implements java.io.Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "使用者編號", nullable = false)
     private 使用者 使用者;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "購物車編號", nullable = false)
+    private 購物車 購物車;
+    
+    @Column(name = "配送地址", nullable = false, precision = 10)
+    private String  配送地址;
 
     @Column(name = "總金額", nullable = false, precision = 10)
     private BigDecimal 總金額;

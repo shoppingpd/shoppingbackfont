@@ -56,14 +56,11 @@ public class 商品 implements java.io.Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "商品")
     private Set<購物車> 購物車s = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "商品")
-    private Set<訂單明細> 訂單明細s = new HashSet<>();
-
 	@Override
 	public String toString() {
 		return "商品 [商品編號=" + 商品編號 + ", 上架者=" + 上架者 + ", 商品名稱=" + 商品名稱 + ", 商品圖片=" + 商品圖片 + ", 商品描述=" + 商品描述 + ", 顏色總類="
 				+ 顏色總類 + ", 尺寸總類=" + 尺寸總類 + ", 價格=" + 價格 + ", 庫存數量=" + 庫存數量 + ", 上架時間=" + 上架時間 + ", 評論s=" + 評論s
-				+ ", 購物車s=" + 購物車s + ", 訂單明細s=" + 訂單明細s + "]";
+				+ ", 購物車s=" + 購物車s + ", 訂單明細s="  + "]";
 	}
     
     
