@@ -169,7 +169,7 @@ public class 訂單dao {
     }
     // ===== 新增訂單 =====
     @Transactional
-    public boolean add(訂單dto obj) {
+    public Integer add(訂單dto obj) {
         try {
         	訂單 product = new 訂單();
 
@@ -215,11 +215,13 @@ public class 訂單dao {
 
             // ✅ 存實體，不是 DTO
             entityManager.persist(product);
+            entityManager.flush(); // 確保主鍵立刻產生
 
-            return true;
+            System.out.println("✅ 新增訂單成功，ID = " + product.get訂單編號());
+            return product.get訂單編號(); // 回傳剛產生的 ID
         } catch (Exception e) {
             System.out.println("add error: " + e.getMessage());
-            return false;
+            return -1;
         }
     }
 

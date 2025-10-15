@@ -21,5 +21,6 @@ public class 購物車dto {
     private String 商品顏色;
     private Integer 價格;
     private Integer 數量;
+    private Integer 狀態;
     private String 加入時間;
 }

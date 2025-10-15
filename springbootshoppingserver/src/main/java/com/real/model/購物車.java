@@ -32,6 +32,9 @@ public class 購物車 implements java.io.Serializable {
     @Column(name = "數量", nullable = false)
     private int 數量;
     
+    @Column(name = "狀態", nullable = false)
+    private int 狀態;
+    
     @Column(name = "商品大小", nullable = false)
     private String 商品大小;
     

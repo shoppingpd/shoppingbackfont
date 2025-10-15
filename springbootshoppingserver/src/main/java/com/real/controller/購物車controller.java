@@ -31,9 +31,9 @@ public class 購物車controller {
 	//新增購物車資訊
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity add(@RequestBody 購物車dto st) {
-		boolean flag=dao.add(st);
-		if(flag) {
-			return ResponseEntity.ok(st);
+		Integer flag=dao.add(st);
+		if(flag>=0) {
+			return ResponseEntity.ok(flag);
 		}else {
 			return ResponseEntity.badRequest().build();
 		}

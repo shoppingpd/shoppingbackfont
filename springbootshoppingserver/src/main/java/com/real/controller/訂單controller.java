@@ -31,9 +31,9 @@ public class 訂單controller {
 	//新增訂單資訊
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity add(@RequestBody 訂單dto st) {
-		boolean flag=dao.add(st);
-		if(flag) {
-			return ResponseEntity.ok(st);
+		Integer flag=dao.add(st);
+		if(flag>=0) {
+			return ResponseEntity.ok(flag);
 		}else {
 			return ResponseEntity.badRequest().build();
 		}

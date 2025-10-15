@@ -50,6 +50,7 @@ public class 購物車dao {
         	            p.get商品顏色(), 
         	            p.get商品().get價格().intValue(),
         	            p.get數量(),
+        	            p.get狀態(),
         	            p.get加入時間().toString()
             	    ))
             	    .collect(Collectors.toList());
@@ -61,7 +62,7 @@ public class 購物車dao {
     }
 
 	@Transactional
-	public boolean add(購物車dto cartDto) {
+	public Integer add(購物車dto cartDto) {
 		try {
 			購物車 cart = new 購物車();
 			cart.set數量(cartDto.get數量());
@@ -104,10 +105,11 @@ public class 購物車dao {
             }
             
 			entityManager.persist(cart);
-			return true;
+			entityManager.flush(); // 確保主鍵立刻產生
+			return cart.get購物車編號();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return -1;
 		}
 	}
 
@@ -130,8 +132,9 @@ public class 購物車dao {
     	            p.get商品().get商品編號(),       // Integer，直接取
     	            p.get商品大小(), 
     	            p.get商品顏色(), 
-    	            	p.get商品().get價格().intValue(),
+    	            p.get商品().get價格().intValue(),
     	            p.get數量(),
+    	            p.get狀態(),
     	            p.get加入時間().toString()
             );
             
@@ -167,6 +170,7 @@ public class 購物車dao {
 		                    p.get商品顏色(), 
 		                    p.get商品().get價格().intValue(),
 		                    p.get數量(),
+		                    p.get狀態(),
 		                    p.get加入時間().toString()
 		            ));
 		        }
@@ -200,6 +204,7 @@ public class 購物車dao {
 					existing.set商品(prod); // 注意這裡的 setter 名稱
 				}
 	            // 更新欄位
+	            existing.set狀態(obj.get狀態());
 	            existing.set商品大小(obj.get商品大小());
 	            existing.set商品顏色(obj.get商品顏色());
 	            existing.set數量(obj.get數量());
