@@ -35,11 +35,8 @@ public class 使用者controller {
     @RequestMapping(method=RequestMethod.POST)
     public ResponseEntity addStudent(@RequestBody 使用者dto st) {
     	boolean flag=dao.add(st);
-    	if(flag) {
-    		return ResponseEntity.ok(st);
-    	}else {
-    		return ResponseEntity.badRequest().build();
-    	}
+    		return ResponseEntity.ok(flag);
+
     }
     
     //根據使用者編號取得使用者資訊
@@ -77,4 +74,17 @@ public class 使用者controller {
    			return ResponseEntity.ok(s1);	
    		
    	}
+    
+    //登入
+    @RequestMapping(value="/login",method=RequestMethod.POST)
+    public ResponseEntity login(@RequestBody 使用者dto st) {
+    	Integer flag=dao.login(st);
+    	return ResponseEntity.ok(flag);
+    }
+    //resetpassword
+    @RequestMapping(value="/changepsd",method=RequestMethod.POST)
+    public ResponseEntity changepsd(@RequestBody 使用者dto st) {
+    	boolean flag=dao.changepsd(st);
+    	return ResponseEntity.ok(flag);
+    }
 }

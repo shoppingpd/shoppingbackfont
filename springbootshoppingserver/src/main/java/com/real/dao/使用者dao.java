@@ -1,6 +1,7 @@
 package com.real.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,12 @@ public class 使用者dao {
     public boolean add(使用者dto obj) {
         try {
         	使用者 product = new 使用者();
+        	TypedQuery<使用者> query = entityManager.createQuery(
+                    "SELECT u FROM 使用者 u WHERE u.帳號 = :account", 使用者.class);
+                query.setParameter("account", obj.get帳號());
+                List<使用者> result = query.getResultList();
+
+                if (!result.isEmpty()) return false;
 
             // ===== 將 DTO 的資料轉回實體 =====
         		product.set帳號(obj.get帳號());
@@ -162,5 +169,53 @@ public class 使用者dao {
             return false;
         }
     }
+    
+    //登入
+    // ===== 依使用者編號查找 =====
+    @Transactional(readOnly = true)
+    public Integer login(使用者dto st) {
+        try {
+            TypedQuery<使用者> query = entityManager.createQuery(
+                "SELECT u FROM 使用者 u WHERE u.帳號 = :account", 使用者.class);
+            query.setParameter("account", st.get帳號());
+            List<使用者> result = query.getResultList();
+
+            if (result.isEmpty()) return -1;
+
+            使用者 p = result.get(0);
+            if(p.get密碼().equals(st.get密碼())) {
+            	return p.get使用者編號();
+            }
+            return -1;
+        } catch (Exception e) {
+            System.out.println("login error: " + e.getMessage());
+            return -1;
+        }
+    }
+    
+    //改密碼
+    // ===== 依使用者編號查找 =====
+    @Transactional(readOnly = false)
+    public boolean changepsd(使用者dto st) {
+        try {
+            TypedQuery<使用者> query = entityManager.createQuery(
+                "SELECT u FROM 使用者 u WHERE u.帳號 = :account", 使用者.class);
+            query.setParameter("account", st.get帳號());
+            List<使用者> result = query.getResultList();
+
+            if (result.isEmpty()) return false;
+            
+
+            使用者 p = result.get(0);
+            使用者dto np= findBySid(p.get使用者編號());
+            np.set密碼(st.get密碼());
+
+            return update(p.get使用者編號(),np);
+        } catch (Exception e) {
+            System.out.println("login error: " + e.getMessage());
+            return false;
+        }
+    }
+
 	
 }
