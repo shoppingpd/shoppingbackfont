@@ -72,6 +72,17 @@ public class 商品controller {
 		
 	}
     
+    //根據商品編號取得商品資訊
+    @RequestMapping(value="/user/{使用者編號編號}",method=RequestMethod.GET)	
+	public ResponseEntity findStudentByuserId(@PathVariable("使用者編號編號")int sid){
+    	List<商品dto> s1=dao.findStudentByuserId(sid);
+		if(s1==null)
+			return ResponseEntity.notFound().build();
+		else
+			return ResponseEntity.ok(s1);	
+		
+	}
+    
     //根據商品編號更改商品資訊
     @RequestMapping(value="/{商品編號}",method=RequestMethod.PUT)	
 	public ResponseEntity updateStudent(@PathVariable("商品編號")int 商品編號,@RequestBody 商品dto obj){

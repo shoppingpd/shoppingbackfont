@@ -7,6 +7,7 @@ import com.real.dto.商品dto;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -182,6 +184,55 @@ public class 商品dao {
         } catch (Exception e) {
             System.out.println("findBySid error: " + e.getMessage());
             return null;
+        }
+    }
+    //上架者查詢
+ // ===== 依上架者編號查找所有商品 =====
+    @Transactional(readOnly = true)
+    public List<商品dto> findStudentByuserId(int uid) {
+    	try {
+            // 1. 定义 JPQL 查询语句 (使用关联路径: p.上架者.使用者編號)
+            String jpql = "SELECT p FROM 商品 p WHERE p.上架者.使用者編號 = :上架者編號";
+            
+            // 2. 创建 TypedQuery
+            TypedQuery<商品> query = entityManager.createQuery(jpql, 商品.class);
+            
+            // 3. 设置参数
+            query.setParameter("上架者編號", uid);
+            
+            // 4. 执行查询并获取结果列表
+            List<商品> 商品列表 = query.getResultList();
+
+            // 检查是否有结果
+            if (商品列表.isEmpty()) {
+                // 如果没有找到商品，返回空列表
+                return Collections.emptyList(); 
+            }
+
+            // 5. 遍历结果并转换为 DTO 列表
+            return 商品列表.stream().map(p -> {
+                // 注意: 确保在 DTO 转换中访问 上架者 属性时，
+                // 它是被加载的，@Transactional(readOnly = true) 通常可以解决这个问题。
+                
+                return new 商品dto(
+                    p.get商品編號(),
+                    p.get商品名稱(),
+                    p.get商品圖片(),
+                    p.get商品描述(),
+                    p.get顏色總類(),
+                    p.get尺寸總類(),
+                    p.get價格(),
+                    p.get庫存數量(),
+                    // 从关联对象中获取使用者编号
+                    p.get上架者() != null ? p.get上架者().get使用者編號().toString() : null, 
+                    p.get上架時間() != null ? p.get上架時間().toString() : null
+                );
+            }).collect(Collectors.toList());
+
+        } catch (Exception e) {
+            // 捕获可能发生的异常
+            System.out.println("findByUid error: " + e.getMessage());
+            return Collections.emptyList(); // 查找失败时返回空列表
         }
     }
 

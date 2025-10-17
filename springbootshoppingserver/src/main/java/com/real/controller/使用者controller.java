@@ -82,7 +82,7 @@ public class 使用者controller {
     	return ResponseEntity.ok(flag);
     }
     //resetpassword
-    @RequestMapping(value="/changepsd",method=RequestMethod.POST)
+    @RequestMapping(value="/changepsd",method=RequestMethod.PUT)
     public ResponseEntity changepsd(@RequestBody 使用者dto st) {
     	boolean flag=dao.changepsd(st);
     	return ResponseEntity.ok(flag);
