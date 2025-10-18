@@ -232,4 +232,23 @@ public class 購物車dao {
 	            return false;
 	        }
 	    }
+	    //
+	    @Transactional(readOnly = true)
+		public List<Integer> findByProductId(int pid) { 
+		    try {
+		        // JPQL 查詢：直接選取 購物車 的 購物車編號
+		        // SELECT c.購物車編號 FROM 購物車 c WHERE c.商品.商品編號 = :pid
+		        List<Integer> cartIds = entityManager.createQuery(
+		                "SELECT c.購物車編號 FROM 購物車 c WHERE c.商品.商品編號 = :pid", Integer.class)
+		                .setParameter("pid", pid) // 設置查詢參數
+		                .getResultList();
+	
+		        return cartIds; // 回傳 Integer 列表
+	
+		    } catch (Exception e) {
+		        // 處理例外
+		        System.out.println("findByProductId error: " + e.getMessage());
+		        return List.of(); // 回傳空列表
+		    }
+		}
 }

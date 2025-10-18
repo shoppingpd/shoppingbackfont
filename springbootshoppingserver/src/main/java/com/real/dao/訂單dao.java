@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,8 @@ public class 訂單dao {
 	@PersistenceContext
     private EntityManager entityManager;
 	
+	@Autowired
+    private 購物車dao cartDao;
 	
 	 // ===== 取得全部訂單 =====
     @Transactional(readOnly = true)
@@ -121,6 +124,56 @@ public class 訂單dao {
 		        return null;
 		    }
 		}
+	 
+	 
+	//根據商品產生訂單資訊
+	 @Transactional(readOnly = true)
+	    public List<訂單dto> findByprodId(int sid) { 
+	    	
+	    	
+	    		List<Integer> cartIds=cartDao.findByProductId(sid);
+	    		for (Integer id : cartIds) {
+	    		    System.out.println(id);
+	    		}
+	        // 1. 處理空列表：如果傳入的 ID 列表是空的，則直接返回空結果，避免 JPQL 錯誤
+	        if (cartIds == null || cartIds.isEmpty()) {
+	            return List.of();
+	        }
+	        
+	        try {
+	            // JPQL 查詢：使用 IN 語句，找到 訂單 c 關聯的 購物車 的 購物車編號 在 cartIds 列表中的所有訂單
+	            List<訂單> orders = entityManager.createQuery(
+	                    "SELECT c FROM 訂單 c WHERE c.購物車.購物車編號 IN :cartIds", 訂單.class)
+	                    .setParameter("cartIds", cartIds) // 將列表設置為 IN 參數
+	                    .getResultList();
+
+	            List<訂單dto> dtoList = new ArrayList<>();
+
+	            // 遍歷結果並轉換為 DTO
+	            for (訂單 p : orders) {
+	                // 手動初始化 Lazy Loading 的關聯
+	                Hibernate.initialize(p.get使用者());
+	                Hibernate.initialize(p.get購物車());
+
+	                dtoList.add(new 訂單dto(
+	                        p.get訂單編號(),
+	                        p.get使用者().get使用者編號(),
+	                        p.get購物車().get購物車編號(),
+	                        p.get配送地址(),
+	                        p.get總金額(),
+	                        p.get狀態(),
+	                        p.get建立時間() != null ? p.get建立時間().toString() : null
+	                ));
+	            }
+
+	            return dtoList;
+
+	        } catch (Exception e) {
+	            System.out.println("findByCartIds error: " + e.getMessage());
+	            return List.of(); // 回傳空列表
+	        }
+	    }
+		 
 
  // 分頁方法
     @Transactional(readOnly = true)
@@ -273,7 +326,7 @@ public class 訂單dao {
 
             existing.set配送地址(obj.get配送地址());
             existing.set總金額(obj.get總金額());
-            existing.set狀態("訂單生效");
+            existing.set狀態(obj.get狀態());
 
             entityManager.merge(existing);
             return true;

@@ -61,6 +61,17 @@ public class 訂單controller {
 		
 	}
 	
+	//根據商品產生訂單資訊
+		@RequestMapping(value="/prod/{商品編號}",method=RequestMethod.GET)	
+		public ResponseEntity findByprodId(@PathVariable("商品編號")int sid){
+			List<訂單dto> s1=dao.findByprodId(sid);
+			if(s1==null)
+				return ResponseEntity.notFound().build();
+			else
+				return ResponseEntity.ok(s1);	
+			
+		}
+	
 	//更新訂單資訊
 	@RequestMapping(value="/{訂單編號}",method=RequestMethod.PUT)	
 	public ResponseEntity updateStudent(@PathVariable("訂單編號")int 訂單編號,@RequestBody 訂單dto obj){

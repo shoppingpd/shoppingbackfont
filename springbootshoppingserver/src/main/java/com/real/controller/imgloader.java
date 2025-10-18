@@ -2,6 +2,7 @@ package com.real.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -47,6 +48,13 @@ public class imgloader {
 
             // 產生新檔名，避免同名覆蓋問題
             String originalName = file.getOriginalFilename();
+            if (originalName != null) {
+                // 將中文轉成 UTF-8 再存
+                byte[] bytes = originalName.getBytes(StandardCharsets.UTF_8);
+                String safeFileName = new String(bytes, StandardCharsets.UTF_8);
+                Path filePath = Paths.get(uploadDir, safeFileName);
+                Files.write(filePath, file.getBytes());
+            }
             String ext = "";
             if (originalName != null && originalName.contains(".")) {
                 ext = originalName.substring(originalName.lastIndexOf("."));
@@ -55,8 +63,7 @@ public class imgloader {
             Path filePath = Paths.get(uploadDir, newFileName);
             Files.write(filePath, file.getBytes());
 
-            String fileUrl = "/files/view/" + newFileName;
-            return ResponseEntity.ok(fileUrl);
+            return ResponseEntity.ok(newFileName);
 
         } catch (IOException e) {
             e.printStackTrace();
